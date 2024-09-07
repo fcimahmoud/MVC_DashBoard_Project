@@ -71,5 +71,32 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(department);
+        }
+        [HttpPost]
+        public IActionResult Delete([FromRoute] int id, Department department)
+        {
+            if (id != department.Id) return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _repository.Delete(department);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // log Exception
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(department);
+        }
     }
 }
