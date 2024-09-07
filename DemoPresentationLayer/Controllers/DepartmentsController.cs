@@ -41,5 +41,35 @@ namespace DemoPresentationLayer.Controllers
             if (department is null) return NotFound();
             return View(department);
         }
+
+        public IActionResult Edit(int? id)
+        {
+            // retrieve department and save it to the view
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(department);
+        }
+        [HttpPost]
+        public IActionResult Edit([FromRoute]int id,Department department)
+        {
+            if(id != department.Id) return BadRequest();
+             
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    _repository.Update(department);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    // log Exception
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View(department);
+        }
+
     }
 }
