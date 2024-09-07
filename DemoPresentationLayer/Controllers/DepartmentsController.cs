@@ -1,4 +1,5 @@
 ﻿using DemoBusinessLogicLayer.Repositories;
+using DemoDataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoPresentationLayer.Controllers
@@ -17,6 +18,19 @@ namespace DemoPresentationLayer.Controllers
             // Retrieve All Departments
             var departments = _repository.GetAll();
             return View(departments);
+        }
+        
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Department department)
+        {
+            // Server Side Validation
+            if (!ModelState.IsValid) return View();
+            _repository.Create(department);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
