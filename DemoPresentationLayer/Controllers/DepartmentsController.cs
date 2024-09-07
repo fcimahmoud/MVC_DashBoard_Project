@@ -32,5 +32,14 @@ namespace DemoPresentationLayer.Controllers
             _repository.Create(department);
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult Details(int? id)
+        {
+            // retrieve department and save it to the view
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(department);
+        }
     }
 }
