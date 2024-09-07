@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace DemoDataAccessLayer.Date
+namespace DemoDataAccessLayer.Data
 {
     public class DataContext : DbContext
     {
@@ -17,8 +17,6 @@ namespace DemoDataAccessLayer.Date
         //public DataContext() : base()
         //{
         //}
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //    => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         public DbSet<Department> Departments { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿
-using DemoDataAccessLayer.Date;
+using DemoDataAccessLayer.Data;
 using DemoDataAccessLayer.Models;
 
 namespace DemoBusinessLogicLayer.Repositories

@@ -1,4 +1,4 @@
-using DemoDataAccessLayer.Date;
+using DemoDataAccessLayer.Data;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.EntityFrameworkCore;
 
