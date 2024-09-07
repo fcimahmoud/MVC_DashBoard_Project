@@ -1,3 +1,5 @@
+using DemoDataAccessLayer.Date;
+
 namespace DemoPresentationLayer
 {
     public class Program
@@ -8,6 +10,7 @@ namespace DemoPresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<DataContext>();
 
             var app = builder.Build();
 

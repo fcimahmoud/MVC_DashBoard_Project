@@ -1,7 +1,7 @@
 ﻿
 namespace DemoDataAccessLayer.Models
 {
-    internal class Department
+    public class Department
     {
         public int Id { get; set; } // Pk
         public int Code { get; set; }

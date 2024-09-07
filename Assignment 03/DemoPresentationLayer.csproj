@@ -7,4 +7,8 @@
     <RootNamespace>Assignment_03</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DemoBusinessLogicLayer\DemoBusinessLogicLayer.csproj" />
+  </ItemGroup>
+
 </Project>

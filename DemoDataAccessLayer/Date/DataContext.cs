@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace DemoDataAccessLayer.Date
 {
-    internal class DataContext : DbContext
+    public class DataContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlServer("connection string");
