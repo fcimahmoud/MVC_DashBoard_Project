@@ -1,4 +1,6 @@
 using DemoDataAccessLayer.Date;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.EntityFrameworkCore;
 
 namespace DemoPresentationLayer
 {
@@ -10,7 +12,11 @@ namespace DemoPresentationLayer
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<DataContext>();
+            //builder.Services.AddScoped<DataContext>();
+            builder.Services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 

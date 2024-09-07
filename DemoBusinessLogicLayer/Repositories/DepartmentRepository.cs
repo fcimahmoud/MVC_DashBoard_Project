@@ -25,10 +25,10 @@ namespace DemoBusinessLogicLayer.Repositories
             _dataContext = dataContext;
         }
 
-        public Department Get(int id)
-        {
-            var dept1 = _dataContext.Departments.FirstOrDefault(e => e.Id == id);
-            return dept1;
-        }
+        //public Department Get(int id)
+        //{
+        //    var dept1 = _dataContext.Departments.FirstOrDefault(e => e.Id == id);
+        //    return dept1;
+        //}
     }
 }

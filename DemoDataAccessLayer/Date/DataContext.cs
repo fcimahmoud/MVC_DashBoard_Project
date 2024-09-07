@@ -6,11 +6,19 @@ namespace DemoDataAccessLayer.Date
 {
     public class DataContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlServer("connection string");
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        {
+        }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-            => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("connection string");
+        //}
+        //public DataContext() : base()
+        //{
+        //}
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //    => modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         public DbSet<Department> Departments { get; set; }
     }
