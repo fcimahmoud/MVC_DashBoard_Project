@@ -4,7 +4,7 @@ using DemoDataAccessLayer.Models;
 
 namespace DemoBusinessLogicLayer.Repositories
 {
-    internal class DepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
 
         /*
@@ -26,9 +26,9 @@ namespace DemoBusinessLogicLayer.Repositories
             _dataContext = dataContext;
         }
 
-        public Department? Get(int id) 
+        public Department? Get(int id)
             => _dataContext.Departments.Find(id);
-        public IEnumerable<Department> GetAll() 
+        public IEnumerable<Department> GetAll()
             => _dataContext.Departments.ToList();
         public int Create(Department entity)
         {
