@@ -10,9 +10,9 @@ namespace Assignment_02
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();     // MVC
-            //builder.Services.AddControllers();              // API
-            //builder.Services.AddRazorPages();               // Razor
-            //builder.Services.AddMvc();                      // For All 3 Projects
+            //builder.Services.AddControllers();            // API
+            //builder.Services.AddRazorPages();             // Razor
+            //builder.Services.AddMvc();                    // For All 3 Projects
 
 
             var app = builder.Build();
