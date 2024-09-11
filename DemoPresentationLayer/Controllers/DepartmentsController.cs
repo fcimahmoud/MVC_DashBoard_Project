@@ -1,4 +1,4 @@
-﻿using DemoBusinessLogicLayer.Repositories;
+﻿using DemoBusinessLogicLayer.Interfaces;
 using DemoDataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 

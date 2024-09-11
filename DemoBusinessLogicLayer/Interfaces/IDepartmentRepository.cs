@@ -1,6 +1,6 @@
 ﻿using DemoDataAccessLayer.Models;
 
-namespace DemoBusinessLogicLayer.Repositories
+namespace DemoBusinessLogicLayer.Interfaces
 {
     public interface IDepartmentRepository
     {
