@@ -19,7 +19,9 @@ namespace DemoPresentationLayer
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
 
-            
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
