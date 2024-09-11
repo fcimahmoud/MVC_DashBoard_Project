@@ -24,7 +24,7 @@ namespace DemoPresentationLayer.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(Department department)
         {
             // Server Side Validation
@@ -33,24 +33,12 @@ namespace DemoPresentationLayer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id)
-        {
-            // retrieve department and save it to the view
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
-        }
+        public IActionResult Details(int? id) 
+            => DepartmentControllerHandler(id, nameof(Details));
 
-        public IActionResult Edit(int? id)
-        {
-            // retrieve department and save it to the view
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
-        }
-        [HttpPost]
+        public IActionResult Edit(int? id) 
+            => DepartmentControllerHandler(id, nameof(Edit));
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute]int id,Department department)
         {
             if(id != department.Id) return BadRequest();
@@ -71,14 +59,9 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
-        public IActionResult Delete(int? id)
-        {
-            if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(department);
-        }
-        [HttpPost]
+        public IActionResult Delete(int? id) 
+            => DepartmentControllerHandler(id, nameof(Delete));
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Department department)
         {
             if (id != department.Id) return BadRequest();
@@ -97,6 +80,14 @@ namespace DemoPresentationLayer.Controllers
                 }
             }
             return View(department);
+        }
+
+        public IActionResult DepartmentControllerHandler(int? id, string viewName)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _repository.Get(id.Value);
+            if (department is null) return NotFound();
+            return View(viewName, department);
         }
     }
 }
