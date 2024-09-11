@@ -5,7 +5,9 @@ namespace DemoDataAccessLayer.Models
     public class Employee
     {
         public int Id { get; set; }
+        [StringLength(maximumLength: 50 , MinimumLength = 5)]
         public string Name { get; set; }
+        [Range(19,60)]
         public int Age { get; set; }
         public string Address { get; set; }
         [DataType(DataType.Currency)]
