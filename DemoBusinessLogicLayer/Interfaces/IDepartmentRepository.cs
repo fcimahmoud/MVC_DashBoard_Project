@@ -1,13 +1,7 @@
-﻿using DemoDataAccessLayer.Models;
-
+﻿
 namespace DemoBusinessLogicLayer.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
-        int Create(Department entity);
-        int Delete(Department entity);
-        Department? Get(int id);
-        IEnumerable<Department> GetAll();
-        int Update(Department entity);
     }
 }

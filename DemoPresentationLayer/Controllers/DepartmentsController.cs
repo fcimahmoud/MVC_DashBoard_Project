@@ -1,22 +1,20 @@
-﻿using DemoBusinessLogicLayer.Interfaces;
-using DemoDataAccessLayer.Models;
-using Microsoft.AspNetCore.Mvc;
-
+﻿
 namespace DemoPresentationLayer.Controllers
 {
     public class DepartmentsController : Controller
     {
-        private readonly IDepartmentRepository _repository;
-        public DepartmentsController(IDepartmentRepository departmentRepository)
-        {
-            _repository = departmentRepository;
+        //private readonly IGenericRepository<Department> _repo;
+        private IDepartmentRepository _repo;
+        public DepartmentsController(IDepartmentRepository repo)
+        { 
+            _repo = repo;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             // Retrieve All Departments
-            var departments = _repository.GetAll();
+            var departments = _repo.GetAll();
             return View(departments);
         }
         
@@ -29,7 +27,7 @@ namespace DemoPresentationLayer.Controllers
         {
             // Server Side Validation
             if (!ModelState.IsValid) return View();
-            _repository.Create(department);
+            _repo.Create(department);
             return RedirectToAction(nameof(Index));
         }
 
@@ -47,7 +45,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repository.Update(department);
+                    _repo.Update(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
@@ -70,7 +68,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repository.Delete(department);
+                    _repo.Delete(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -85,7 +83,7 @@ namespace DemoPresentationLayer.Controllers
         public IActionResult DepartmentControllerHandler(int? id, string viewName)
         {
             if (!id.HasValue) return BadRequest();
-            var department = _repository.Get(id.Value);
+            var department = _repo.Get(id.Value);
             if (department is null) return NotFound();
             return View(viewName, department);
         }
