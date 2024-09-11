@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<Employee>
 @{
     ViewData["Title"] = "Index";
+    // var employee = @ViewData["Message"] as Employee;
 }
+
+@* <h1>@employee.Name</h1> *@
+@* <h1>@ViewBag.Message</h1> *@
+<h1 class="alert-success">@TempData["Message"]</h1>
 
 <div>
     <a class="btn btn-primary mt-3" asp-action="Create">Create New Employee</a>

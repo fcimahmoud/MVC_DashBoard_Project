@@ -14,6 +14,12 @@ namespace DemoPresentationLayer.Controllers
 
         public IActionResult Index()
         {
+            // ViewData => Dictionary<string,object>
+            //ViewData["Message"] = "Hello From ViewData";
+
+            // C# Feature ViewBag
+            //ViewBag.Message = "Hello From ViewBag";
+
             var employees = _repo.GetAll();
             return View(employees);
         }
@@ -43,7 +49,8 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Update(employee);
+                    if (_repo.Update(employee) > 0)
+                        TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
