@@ -1,8 +1,4 @@
-using DemoBusinessLogicLayer.Repositories;
-using DemoDataAccessLayer.Data;
-using Microsoft.AspNetCore.Connections;
-using Microsoft.EntityFrameworkCore;
-
+ 
 namespace DemoPresentationLayer
 {
     public class Program
@@ -18,7 +14,12 @@ namespace DemoPresentationLayer
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
+
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 
             var app = builder.Build();

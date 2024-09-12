@@ -6,20 +6,8 @@
 <h1>Delete @Model.Name Department</h1>
 
 <form method="post" asp-action="Delete">
-    <div asp-validation-summary="All"></div>
-    <div class="form-group">
-        <label asp-for="Code"></label>
-        <input readonly class="form-control" asp-for="Code" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input readonly class="form-control" asp-for="Name" />
-    </div>
-    <div class="form-group">
-        <label asp-for="DateOfCreation"></label>
-        <input readonly class="form-control" asp-for="DateOfCreation" />
-    </div>
-    <div class="form-group">
+    <partial name="PartialViews/DetialsDeletePartial"></partial>
+    <div class="form-group mt-3">
         <button class="btn btn-danger" type="submit">Delete</button>
         <a class="btn btn-secondary" asp-action="Index">Back</a>
     </div>
