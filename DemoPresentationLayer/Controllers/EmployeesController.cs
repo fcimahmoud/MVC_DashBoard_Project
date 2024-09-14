@@ -1,4 +1,6 @@
 ﻿
+using DemoPresentationLayer.Utilities;
+
 namespace DemoPresentationLayer.Controllers
 {
     public class EmployeesController : Controller
@@ -34,8 +36,12 @@ namespace DemoPresentationLayer.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(EmployeeViewModel employeeVM)
         {
-            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             if (!ModelState.IsValid) return View(employeeVM);
+
+            if (employeeVM.Image is not null)
+                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+
+            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             _unitOfWork.Employees.Create(employee);
             _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
@@ -55,6 +61,9 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
+                    if (employeeVM.Image is not null)
+                        employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+
                     var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                     _unitOfWork.Employees.Update(employee);
                     if (_unitOfWork.SaveChanges() > 0)
@@ -82,6 +91,8 @@ namespace DemoPresentationLayer.Controllers
                 try
                 {
                     _unitOfWork.Employees.Delete(employee);
+                    if (_unitOfWork.SaveChanges() > 0 && employee.ImageName is not null)
+                        DocumentSettings.DeleteFile("Images", employee.ImageName);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)

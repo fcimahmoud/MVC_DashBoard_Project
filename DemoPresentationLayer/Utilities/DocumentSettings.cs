@@ -8,7 +8,7 @@
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\Files" ,folderName);
 
             // Create Unique Name For File
-            string fileName = $"{Guid.NewGuid}-{file.FileName}";
+            string fileName = $"{Guid.NewGuid()}-{file.FileName}";
 
             // Create FilePath
             string filePath = Path.Combine(folderPath, fileName);
