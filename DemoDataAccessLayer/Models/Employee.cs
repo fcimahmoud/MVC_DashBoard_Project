@@ -17,5 +17,9 @@ namespace DemoDataAccessLayer.Models
         [Phone]
         public string Phone { get; set; }
         public bool IsActive { get; set; }
+
+        public Department? Department { get; set; }
+        public int? DepartmentiD { get; set; }
+
     }
 }
