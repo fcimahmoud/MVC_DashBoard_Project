@@ -19,7 +19,7 @@ namespace DemoDataAccessLayer.Models
         public bool IsActive { get; set; }
 
         public Department? Department { get; set; }
-        public int? DepartmentiD { get; set; }
+        public int? DepartmentId { get; set; }
 
     }
 }

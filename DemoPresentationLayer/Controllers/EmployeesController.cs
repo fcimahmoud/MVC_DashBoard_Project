@@ -1,15 +1,16 @@
 ﻿
 using DemoDataAccessLayer.Models;
-using System.CodeDom;
 
 namespace DemoPresentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
-        private IEmployeeRepository _repo;
-        public EmployeesController(IEmployeeRepository repo)
+        private IEmployeeRepository _employeeRepo;
+        private IDepartmentRepository _departmentRepo;
+        public EmployeesController(IEmployeeRepository employeeRepo, IDepartmentRepository departmentRepo)
         {
-            _repo = repo;
+            _employeeRepo = employeeRepo;
+            _departmentRepo = departmentRepo;
         }
 
         public IActionResult Index()
@@ -20,19 +21,22 @@ namespace DemoPresentationLayer.Controllers
             // C# Feature ViewBag
             //ViewBag.Message = "Hello From ViewBag";
 
-            var employees = _repo.GetAll();
+            var employees = _employeeRepo.GetAllWithDepartments();
             return View(employees);
         }
 
         public IActionResult Create()
         {
+            var departments = _departmentRepo.GetAll();
+            SelectList listItems = new SelectList(departments , "Id", "Name");
+            ViewBag.Departments = listItems;
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(Employee employee)
         {
             if (!ModelState.IsValid) return View();
-            _repo.Create(employee);
+            _employeeRepo.Create(employee);
             return RedirectToAction(nameof(Index));
         }
 
@@ -49,7 +53,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    if (_repo.Update(employee) > 0)
+                    if (_employeeRepo.Update(employee) > 0)
                         TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction(nameof(Index));
                 }
@@ -73,7 +77,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Delete(employee);
+                    _employeeRepo.Delete(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
@@ -86,8 +90,14 @@ namespace DemoPresentationLayer.Controllers
 
         public IActionResult EmployeeControllerHandler(int? id, string viewName)
         {
+            if(viewName == nameof(Edit))
+            {
+                var departments = _departmentRepo.GetAll();
+                SelectList listItems = new SelectList(departments, "Id", "Name");
+                ViewBag.Departments = listItems;
+            }
             if (!id.HasValue) return BadRequest();
-            var department = _repo.Get(id.Value);
+            var department = _employeeRepo.Get(id.Value);
             if (department is null) return NotFound();
             return View(viewName, department);
         }

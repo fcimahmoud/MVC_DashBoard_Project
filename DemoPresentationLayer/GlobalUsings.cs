@@ -4,3 +4,5 @@ global using DemoDataAccessLayer.Models;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.AspNetCore.Mvc;
 global using DemoBusinessLogicLayer.Repositories;
+global using Microsoft.AspNetCore.Mvc.Rendering;
+ 
