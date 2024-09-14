@@ -7,8 +7,8 @@ namespace DemoBusinessLogicLayer.Repositories
         {
         }
 
-        public IEnumerable<Employee> GetAll(string Address)
-            => _dbSet.Where(e => e.Address.ToLower() == Address.ToLower()).ToList();
+        public IEnumerable<Employee> GetAll(string name)
+            => _dbSet.Where(e => e.Name.ToLower().Contains(name.ToLower())).Include(e => e.Department).ToList();
 
         public IEnumerable<Employee> GetAllWithDepartments()
             => _dbSet.Include(e => e.Department).ToList();

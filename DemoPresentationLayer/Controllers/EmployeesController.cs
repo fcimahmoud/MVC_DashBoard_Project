@@ -13,15 +13,13 @@ namespace DemoPresentationLayer.Controllers
             _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? searchValue)
         {
-            // ViewData => Dictionary<string,object>
-            //ViewData["Message"] = "Hello From ViewData";
-
-            // C# Feature ViewBag
-            //ViewBag.Message = "Hello From ViewBag";
-
-            var employees = _employeeRepo.GetAllWithDepartments();
+            var employees = Enumerable.Empty<Employee>();
+            if (string.IsNullOrEmpty(searchValue))
+                employees = _employeeRepo.GetAllWithDepartments();
+            else
+                employees = _employeeRepo.GetAll(searchValue);
 
             var employeesViewModel = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
