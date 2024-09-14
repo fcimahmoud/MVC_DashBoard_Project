@@ -3,23 +3,21 @@ namespace DemoPresentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
-        private IEmployeeRepository _employeeRepo;
-        private IDepartmentRepository _departmentRepo;
         private readonly IMapper _mapper;
-        public EmployeesController(IEmployeeRepository employeeRepo, IDepartmentRepository departmentRepo, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        public EmployeesController(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _employeeRepo = employeeRepo;
-            _departmentRepo = departmentRepo;
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index(string? searchValue)
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrEmpty(searchValue))
-                employees = _employeeRepo.GetAllWithDepartments();
+                employees = _unitOfWork.Employees.GetAllWithDepartments();
             else
-                employees = _employeeRepo.GetAll(searchValue);
+                employees = _unitOfWork.Employees.GetAll(searchValue);
 
             var employeesViewModel = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
@@ -28,7 +26,7 @@ namespace DemoPresentationLayer.Controllers
 
         public IActionResult Create()
         {
-            var departments = _departmentRepo.GetAll();
+            var departments = _unitOfWork.Departments.GetAll();
             SelectList listItems = new SelectList(departments , "Id", "Name");
             ViewBag.Departments = listItems;
             return View();
@@ -38,7 +36,8 @@ namespace DemoPresentationLayer.Controllers
         {
             var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
             if (!ModelState.IsValid) return View(employeeVM);
-            _employeeRepo.Create(employee);
+            _unitOfWork.Employees.Create(employee);
+            _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
@@ -52,14 +51,13 @@ namespace DemoPresentationLayer.Controllers
         {
             if (id != employeeVM.Id) return BadRequest();
 
-
-
             if (ModelState.IsValid)
             {
                 try
                 {
                     var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-                    if (_employeeRepo.Update(employee) > 0)
+                    _unitOfWork.Employees.Update(employee);
+                    if (_unitOfWork.SaveChanges() > 0)
                         TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction(nameof(Index));
                 }
@@ -83,7 +81,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _employeeRepo.Delete(employee);
+                    _unitOfWork.Employees.Delete(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
@@ -98,12 +96,12 @@ namespace DemoPresentationLayer.Controllers
         {
             if(viewName == nameof(Edit))
             {
-                var departments = _departmentRepo.GetAll();
+                var departments = _unitOfWork.Departments.GetAll();
                 SelectList listItems = new SelectList(departments, "Id", "Name");
                 ViewBag.Departments = listItems;
             }
             if (!id.HasValue) return BadRequest();
-            var employee = _employeeRepo.Get(id.Value);
+            var employee = _unitOfWork.Employees.Get(id.Value);
             if (employee is null) return NotFound();
 
             #region Manual Mapping

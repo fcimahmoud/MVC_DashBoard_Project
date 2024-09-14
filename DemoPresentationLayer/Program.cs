@@ -20,8 +20,7 @@ namespace DemoPresentationLayer
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 
