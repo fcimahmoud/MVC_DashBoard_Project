@@ -1,16 +1,16 @@
 ﻿
-using DemoDataAccessLayer.Models;
-
 namespace DemoPresentationLayer.Controllers
 {
     public class EmployeesController : Controller
     {
         private IEmployeeRepository _employeeRepo;
         private IDepartmentRepository _departmentRepo;
-        public EmployeesController(IEmployeeRepository employeeRepo, IDepartmentRepository departmentRepo)
+        private readonly IMapper _mapper;
+        public EmployeesController(IEmployeeRepository employeeRepo, IDepartmentRepository departmentRepo, IMapper mapper)
         {
             _employeeRepo = employeeRepo;
             _departmentRepo = departmentRepo;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -22,7 +22,10 @@ namespace DemoPresentationLayer.Controllers
             //ViewBag.Message = "Hello From ViewBag";
 
             var employees = _employeeRepo.GetAllWithDepartments();
-            return View(employees);
+
+            var employeesViewModel = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
+
+            return View(employeesViewModel);
         }
 
         public IActionResult Create()
@@ -33,9 +36,10 @@ namespace DemoPresentationLayer.Controllers
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeViewModel employeeVM)
         {
-            if (!ModelState.IsValid) return View();
+            var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
+            if (!ModelState.IsValid) return View(employeeVM);
             _employeeRepo.Create(employee);
             return RedirectToAction(nameof(Index));
         }
@@ -46,13 +50,17 @@ namespace DemoPresentationLayer.Controllers
         public IActionResult Edit([FromRoute] int? id)
             => EmployeeControllerHandler(id , nameof(Edit));
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int? id, Employee employee)
+        public IActionResult Edit([FromRoute]int? id, EmployeeViewModel employeeVM)
         {
-            if (id != employee.Id) return BadRequest();
+            if (id != employeeVM.Id) return BadRequest();
+
+
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                     if (_employeeRepo.Update(employee) > 0)
                         TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction(nameof(Index));
@@ -63,7 +71,7 @@ namespace DemoPresentationLayer.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            return View(employee);
+            return View(employeeVM);
 
         }
 
@@ -97,9 +105,28 @@ namespace DemoPresentationLayer.Controllers
                 ViewBag.Departments = listItems;
             }
             if (!id.HasValue) return BadRequest();
-            var department = _employeeRepo.Get(id.Value);
-            if (department is null) return NotFound();
-            return View(viewName, department);
+            var employee = _employeeRepo.Get(id.Value);
+            if (employee is null) return NotFound();
+
+            #region Manual Mapping
+            /*            var employeeVM = new EmployeeViewModel()
+                        {
+                            Address = employee.Address,
+                            Department = employee.Department,
+                            DepartmentId = employee.DepartmentId,
+                            Name = employee.Name,
+                            Id = employee.Id,
+                            IsActive = employee.IsActive,
+                            Phone = employee.Phone,
+                            Salary = employee.Salary,
+                            Age = employee.Age,
+                            Email = employee.Email,
+                        };*/
+            #endregion
+
+            var employeeVM = _mapper.Map<EmployeeViewModel>(employee);
+
+            return View(viewName, employeeVM);
         }
 
     }
