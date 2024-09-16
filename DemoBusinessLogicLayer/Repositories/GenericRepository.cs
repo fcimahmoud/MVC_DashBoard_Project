@@ -14,24 +14,10 @@ namespace DemoBusinessLogicLayer.Repositories
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-        public int Create(TEntity entity)
-        {
-            _dbSet.Add(entity);
-            return _dbContext.SaveChanges();
-        }
-        public int Delete(TEntity entity)
-        {
-            _dbSet.Remove(entity);
-            return _dbContext.SaveChanges();
-        }
-        public TEntity? Get(int id)
-            => _dbSet.Find(id);
-        public IEnumerable<TEntity> GetAll()
-            => _dbSet.ToList();  
-        public int Update(TEntity entity)
-        {
-            _dbSet.Update(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Create(TEntity entity) => _dbSet.Add(entity);
+        public void Delete(TEntity entity) => _dbSet.Remove(entity);
+        public TEntity? Get(int id) => _dbSet.Find(id);
+        public IEnumerable<TEntity> GetAll() => _dbSet.ToList();
+        public void Update(TEntity entity) => _dbSet.Update(entity);
     }
 }

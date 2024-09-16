@@ -1,4 +1,4 @@
- 
+
 namespace DemoPresentationLayer
 {
     public class Program
@@ -8,19 +8,19 @@ namespace DemoPresentationLayer
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
+
             //builder.Services.AddScoped<DataContext>();
             builder.Services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //builder.Services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
-
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

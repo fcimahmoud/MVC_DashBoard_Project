@@ -1,4 +1,4 @@
-namespace DemoPresentationLayer.Models
+namespace ServiceLifeTime.Models
 {
     public class ErrorViewModel
     {

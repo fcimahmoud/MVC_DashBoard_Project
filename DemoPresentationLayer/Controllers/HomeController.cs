@@ -1,6 +1,3 @@
-using DemoPresentationLayer.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace DemoPresentationLayer.Controllers
 {

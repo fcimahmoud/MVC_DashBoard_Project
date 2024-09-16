@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoBusinessLogicLayer", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoDataAccessLayer", "DemoDataAccessLayer\DemoDataAccessLayer.csproj", "{EE67E4D2-65C5-44DD-B996-1C68A80FDD3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoPresentationLayer", "DemoPresentationLayer\DemoPresentationLayer.csproj", "{CA420350-360A-4C7B-A786-C90499E77571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoPresentationLayer", "DemoPresentationLayer\DemoPresentationLayer.csproj", "{CA420350-360A-4C7B-A786-C90499E77571}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
