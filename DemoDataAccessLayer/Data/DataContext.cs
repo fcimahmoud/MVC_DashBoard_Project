@@ -1,10 +1,7 @@
-﻿using DemoDataAccessLayer.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-
+﻿
 namespace DemoDataAccessLayer.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -24,6 +21,8 @@ namespace DemoDataAccessLayer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Employee>()
                 .Property(e => e.Salary)
                 .HasColumnType("decimal(18,5)");
