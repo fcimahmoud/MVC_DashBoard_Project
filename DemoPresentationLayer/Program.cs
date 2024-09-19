@@ -19,7 +19,12 @@ namespace DemoPresentationLayer
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                //config.Password.RequireNonAlphanumeric = false;
+                //config.Password.RequireUppercase = false;
+                //config.Password.RequireLowercase = false;
+            })
                 .AddEntityFrameworkStores<DataContext>();
 
             ///builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();

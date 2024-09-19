@@ -5,9 +5,12 @@ namespace DemoPresentationLayer.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-		public AccountController(UserManager<ApplicationUser> userManager)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+		public AccountController(UserManager<ApplicationUser> userManager, 
+            SignInManager<ApplicationUser> signInManager)
 		{
 			_userManager = userManager;
+			_signInManager = signInManager;
 		}
 
 		public IActionResult Register()
@@ -38,5 +41,28 @@ namespace DemoPresentationLayer.Controllers
         {
             return View();
         }
-    }
+        [HttpPost]
+		public IActionResult Login(LoginViewModel model)
+		{
+            // 1. Server Side Validation
+			if(!ModelState.IsValid) return View(model);
+
+            // 2. Check If User Exist
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if(user is not null)
+            {
+                // 3. Check Password Correct
+                if (_userManager.CheckPasswordAsync(user, model.Password).Result)
+                {
+                    // 4. Login If Password is Correct
+                    var result = _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false).Result;
+                    if (result.Succeeded)
+                        return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", string.Empty));
+                }
+            }
+
+			ModelState.AddModelError(string.Empty, "InCorrect Email Or Password");
+			return View(model);
+		}
+	}
 }
