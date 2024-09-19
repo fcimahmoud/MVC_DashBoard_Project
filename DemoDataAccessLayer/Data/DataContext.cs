@@ -15,10 +15,6 @@ namespace DemoDataAccessLayer.Data
         //{
         //}
 
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,5 +23,8 @@ namespace DemoDataAccessLayer.Data
                 .Property(e => e.Salary)
                 .HasColumnType("decimal(18,5)");
         }
+
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
