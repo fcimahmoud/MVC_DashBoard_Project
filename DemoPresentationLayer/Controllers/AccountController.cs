@@ -1,5 +1,4 @@
-﻿global using Microsoft.AspNetCore.Identity;
-
+﻿
 namespace DemoPresentationLayer.Controllers
 {
     public class AccountController : Controller
@@ -64,5 +63,11 @@ namespace DemoPresentationLayer.Controllers
 			ModelState.AddModelError(string.Empty, "InCorrect Email Or Password");
 			return View(model);
 		}
+
+        public new IActionResult SignOut()
+        {
+            _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
 	}
 }

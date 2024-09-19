@@ -9,4 +9,6 @@ global using DemoPresentationLayer.ViewModels;
 global using System.Diagnostics;
 global using System.ComponentModel.DataAnnotations;
 global using AutoMapper;
-global using System.Reflection;
+global using DemoPresentationLayer.Utilities;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
