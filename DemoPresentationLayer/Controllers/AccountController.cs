@@ -1,4 +1,6 @@
 ﻿
+using NuGet.Common;
+
 namespace DemoPresentationLayer.Controllers
 {
     public class AccountController : Controller
@@ -79,10 +81,10 @@ namespace DemoPresentationLayer.Controllers
             if(user is not null)
             {
                 // Create Reset Password Token
-                var token = _userManager.GeneratePasswordResetTokenAsync(user);
+                var token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
                 // Create Url to Reset Password
                 var url = Url.Action(nameof(ResetPassword),
-                    nameof(HomeController).Replace("Controller", string.Empty), 
+                    nameof(AccountController).Replace("Controller", string.Empty), 
                     new {email = model.Email, Token = token}, Request.Scheme);
                 // Create Email Object 
                 var email = new Email
@@ -106,9 +108,33 @@ namespace DemoPresentationLayer.Controllers
             return View();
         }
 
-		public IActionResult ResetPassword()
+		public IActionResult ResetPassword(string email , string token)
         {
+			if (email == null || token == null) return BadRequest();
+            TempData["Email"] = email;
+            TempData["Token"] = token;
             return View();
         }
-    }
+        [HttpPost]
+		public IActionResult ResetPassword(ResetPasswordViewModel model)
+		{
+            model.Email = TempData["Email"]?.ToString() ?? string.Empty;
+			model.Token = TempData["Token"]?.ToString() ?? string.Empty;
+			if (!ModelState.IsValid) return View(model);
+
+            var user = _userManager.FindByEmailAsync(model.Email).Result;
+            if (user != null)
+            {
+                var result = _userManager.ResetPasswordAsync(user, model.Token, model.Password).Result;
+                if (result.Succeeded)
+                    return RedirectToAction(nameof(Login));
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
+            }
+            ModelState.AddModelError(string.Empty, "User Not Found");
+			TempData["Email"] = model.Email;
+			TempData["Token"] = model.Token;
+			return View(model);
+		}
+	}
 }
