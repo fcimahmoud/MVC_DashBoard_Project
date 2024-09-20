@@ -25,7 +25,8 @@ namespace DemoPresentationLayer
                 //config.Password.RequireUppercase = false;
                 //config.Password.RequireLowercase = false;
             })
-                .AddEntityFrameworkStores<DataContext>();
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
 
             ///builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             ///builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
