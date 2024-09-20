@@ -93,7 +93,7 @@ namespace DemoPresentationLayer.Controllers
                 };
                 // ToDo
                 // Send Email
-
+                MailSettings.SendEmail(email);
                 // Redirect to check Ur Inbox
                 return RedirectToAction(nameof(CheckYourInBox)); 
             }
