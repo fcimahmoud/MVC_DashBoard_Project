@@ -1,8 +1,7 @@
 ﻿
-using DemoPresentationLayer.Utilities;
-
 namespace DemoPresentationLayer.Controllers
 {
+    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IMapper _mapper;
@@ -12,7 +11,7 @@ namespace DemoPresentationLayer.Controllers
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-
+        [AllowAnonymous]
         public IActionResult Index(string? searchValue)
         {
             var employees = Enumerable.Empty<Employee>();

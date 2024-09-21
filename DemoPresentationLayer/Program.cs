@@ -18,10 +18,20 @@ namespace DemoPresentationLayer
             });
 
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(config =>
+            {
+                //config.Password.RequireNonAlphanumeric = false;
+                //config.Password.RequireUppercase = false;
+                //config.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
 
+            ///builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            ///builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            ///builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
