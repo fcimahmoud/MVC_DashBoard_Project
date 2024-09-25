@@ -4,18 +4,20 @@ namespace DemoPresentationLayer.Controllers
 {
     public class DepartmentsController : Controller
     {
-        //private readonly IGenericRepository<Department> _repo;
-        private IDepartmentRepository _repo;
-        public DepartmentsController(IDepartmentRepository repo)
-        { 
-            _repo = repo;
-        }
+		//private readonly IGenericRepository<Department> _repo;
+		//private IDepartmentRepository _repo;
+		private readonly IUnitOfWork _unitOfWork;
 
-        [HttpGet]
+		public DepartmentsController(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
+
+		[HttpGet]
         public async Task<IActionResult> Index()
         {
             // Retrieve All Departments
-            var departments = await _repo.GetAllAsync();
+            var departments = await _unitOfWork.Departments.GetAllAsync();
             return View(departments);
         }
         
@@ -28,7 +30,7 @@ namespace DemoPresentationLayer.Controllers
         {
             // Server Side Validation
             if (!ModelState.IsValid) return View();
-			await _repo.AddAsync(department);
+			await _unitOfWork.Departments.AddAsync(department);
             return RedirectToAction(nameof(Index));
         }
 
@@ -46,7 +48,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Update(department);
+					_unitOfWork.Departments.Update(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
@@ -69,7 +71,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Delete(department);
+					_unitOfWork.Departments.Delete(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -84,7 +86,7 @@ namespace DemoPresentationLayer.Controllers
         public async Task<IActionResult> DepartmentControllerHandlerAsync(int? id, string viewName)
         {
             if (!id.HasValue) return BadRequest();
-            var department = await _repo.GetAsync(id.Value);
+            var department = await _unitOfWork.Departments.GetAsync(id.Value);
             if (department is null) return NotFound();
             return View(viewName, department);
         }
