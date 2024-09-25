@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.VisualBasic;
+
 namespace DemoBusinessLogicLayer.Repositories
 {
     public class UnitOfWork : IUnitOfWork
@@ -18,7 +20,7 @@ namespace DemoBusinessLogicLayer.Repositories
             => _employeeRepository.Value;
         public IDepartmentRepository Departments 
             => _departmentRepository.Value; 
-        public int SaveChanges() 
-            => _dataContext.SaveChanges();
+        public async Task<int> SaveChangesAsync() 
+            => await _dataContext.SaveChangesAsync();
     }
 }

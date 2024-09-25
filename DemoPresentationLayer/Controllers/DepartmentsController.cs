@@ -1,4 +1,5 @@
 ﻿
+
 namespace DemoPresentationLayer.Controllers
 {
     public class DepartmentsController : Controller
@@ -11,10 +12,10 @@ namespace DemoPresentationLayer.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Retrieve All Departments
-            var departments = _repo.GetAll();
+            var departments = await _repo.GetAllAsync();
             return View(departments);
         }
         
@@ -23,19 +24,19 @@ namespace DemoPresentationLayer.Controllers
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(Department department)
+        public async Task<IActionResult> Create(Department department)
         {
             // Server Side Validation
             if (!ModelState.IsValid) return View();
-            _repo.Create(department);
+			await _repo.AddAsync(department);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id) 
-            => DepartmentControllerHandler(id, nameof(Details));
+        public async Task<IActionResult> Details(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Details));
 
-        public IActionResult Edit(int? id) 
-            => DepartmentControllerHandler(id, nameof(Edit));
+        public async Task<IActionResult> Edit(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Edit));
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute]int id,Department department)
         {
@@ -57,8 +58,8 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
-        public IActionResult Delete(int? id) 
-            => DepartmentControllerHandler(id, nameof(Delete));
+        public async Task<IActionResult> Delete(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Delete));
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Department department)
         {
@@ -80,10 +81,10 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
-        public IActionResult DepartmentControllerHandler(int? id, string viewName)
+        public async Task<IActionResult> DepartmentControllerHandlerAsync(int? id, string viewName)
         {
             if (!id.HasValue) return BadRequest();
-            var department = _repo.Get(id.Value);
+            var department = await _repo.GetAsync(id.Value);
             if (department is null) return NotFound();
             return View(viewName, department);
         }

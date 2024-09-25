@@ -7,10 +7,10 @@ namespace DemoBusinessLogicLayer.Repositories
         {
         }
 
-        public IEnumerable<Employee> GetAll(string name)
-            => _dbSet.Where(e => e.Name.ToLower().Contains(name.ToLower())).Include(e => e.Department).ToList();
+        public async Task<IEnumerable<Employee>> GetAllAsync(string name)
+            => await _dbSet.Where(e => e.Name.ToLower().Contains(name.ToLower())).Include(e => e.Department).ToListAsync();
 
-        public IEnumerable<Employee> GetAllWithDepartments()
-            => _dbSet.Include(e => e.Department).ToList();
+        public async Task<IEnumerable<Employee>> GetAllWithDepartmentsAsync()
+            => await _dbSet.Include(e => e.Department).ToListAsync();
     }
 }

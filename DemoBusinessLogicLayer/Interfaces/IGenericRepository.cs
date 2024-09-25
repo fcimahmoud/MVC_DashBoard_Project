@@ -3,10 +3,10 @@ namespace DemoBusinessLogicLayer.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        void Create(TEntity entity);
+        Task AddAsync(TEntity entity);
         void Delete(TEntity entity);
-        TEntity? Get(int id);
-        IEnumerable<TEntity> GetAll();
+        Task<TEntity?> GetAsync(int id);
+		Task<IEnumerable<TEntity>> GetAllAsync();
         void Update(TEntity entity);
     }
 }
