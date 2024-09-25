@@ -3,7 +3,8 @@ using System.Data;
 
 namespace DemoPresentationLayer.Controllers
 {
-	public class UsersController : Controller
+    [Authorize(Roles = "Admin")]
+    public class UsersController : Controller
 	{
 		private readonly UserManager<ApplicationUser> _userManager;
 		private readonly IMapper _mapper;

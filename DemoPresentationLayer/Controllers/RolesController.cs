@@ -1,6 +1,7 @@
 ﻿
 namespace DemoPresentationLayer.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -145,7 +146,6 @@ namespace DemoPresentationLayer.Controllers
             }
             return View(usersInRole);
         }
-
         [HttpPost]
         public async Task<IActionResult> AddOrRemoveUsers(string roleId, List<UserInRoleViewModel> users)
         {
