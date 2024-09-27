@@ -1,7 +1,6 @@
 ﻿
 namespace DemoPresentationLayer.Controllers
 {
-    [Authorize]
     public class EmployeesController : Controller
     {
         private readonly IMapper _mapper;
@@ -11,48 +10,48 @@ namespace DemoPresentationLayer.Controllers
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-        [AllowAnonymous]
-        public IActionResult Index(string? searchValue)
+
+        public async Task<IActionResult> Index(string? searchValue)
         {
             var employees = Enumerable.Empty<Employee>();
             if (string.IsNullOrEmpty(searchValue))
-                employees = _unitOfWork.Employees.GetAllWithDepartments();
+                employees = await _unitOfWork.Employees.GetAllWithDepartmentsAsync();
             else
-                employees = _unitOfWork.Employees.GetAll(searchValue);
+                employees = await _unitOfWork.Employees.GetAllAsync(searchValue);
 
             var employeesViewModel = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(employees);
 
             return View(employeesViewModel);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _unitOfWork.Departments.GetAll();
+            var departments = await _unitOfWork.Departments.GetAllAsync();
             SelectList listItems = new SelectList(departments , "Id", "Name");
             ViewBag.Departments = listItems;
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(EmployeeViewModel employeeVM)
+        public async Task<IActionResult> Create(EmployeeViewModel employeeVM)
         {
             if (!ModelState.IsValid) return View(employeeVM);
 
             if (employeeVM.Image is not null)
-                employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+                employeeVM.ImageName = await DocumentSettings.UploadFileAsync(employeeVM.Image, "Images");
 
             var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
-            _unitOfWork.Employees.Create(employee);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.Employees.AddAsync(employee);
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details([FromRoute] int? id)
-            => EmployeeControllerHandler(id, nameof(Details));
+        public async Task<IActionResult> Details([FromRoute] int? id)
+            => await EmployeeControllerHandlerAsync(id, nameof(Details));
 
-        public IActionResult Edit([FromRoute] int? id)
-            => EmployeeControllerHandler(id , nameof(Edit));
+        public async Task<IActionResult> Edit([FromRoute] int? id)
+            => await EmployeeControllerHandlerAsync(id , nameof(Edit));
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int? id, EmployeeViewModel employeeVM)
+        public async Task<IActionResult> Edit([FromRoute]int? id, EmployeeViewModel employeeVM)
         {
             if (id != employeeVM.Id) return BadRequest();
 
@@ -61,11 +60,11 @@ namespace DemoPresentationLayer.Controllers
                 try
                 {
                     if (employeeVM.Image is not null)
-                        employeeVM.ImageName = DocumentSettings.UploadFile(employeeVM.Image, "Images");
+                        employeeVM.ImageName = await DocumentSettings.UploadFileAsync(employeeVM.Image, "Images");
 
                     var employee = _mapper.Map<EmployeeViewModel, Employee>(employeeVM);
                     _unitOfWork.Employees.Update(employee);
-                    if (_unitOfWork.SaveChanges() > 0)
+                    if (await _unitOfWork.SaveChangesAsync() > 0)
                         TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction(nameof(Index));
                 }
@@ -79,10 +78,10 @@ namespace DemoPresentationLayer.Controllers
 
         }
 
-        public IActionResult Delete([FromRoute] int? id)
-            => EmployeeControllerHandler(id, nameof(Delete));
+        public async Task<IActionResult> Delete([FromRoute] int? id)
+            => await EmployeeControllerHandlerAsync(id, nameof(Delete));
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute]int? id, Employee employee)
+        public async Task<IActionResult> Delete([FromRoute]int? id, Employee employee)
         {
             if (id != employee.Id) return BadRequest();
             if (ModelState.IsValid)
@@ -90,7 +89,7 @@ namespace DemoPresentationLayer.Controllers
                 try
                 {
                     _unitOfWork.Employees.Delete(employee);
-                    if (_unitOfWork.SaveChanges() > 0 && employee.ImageName is not null)
+                    if (await _unitOfWork.SaveChangesAsync() > 0 && employee.ImageName is not null)
                         DocumentSettings.DeleteFile("Images", employee.ImageName);
                     return RedirectToAction(nameof(Index));
                 }
@@ -102,16 +101,16 @@ namespace DemoPresentationLayer.Controllers
             return View(employee);
         }
 
-        public IActionResult EmployeeControllerHandler(int? id, string viewName)
+        public async Task<IActionResult> EmployeeControllerHandlerAsync(int? id, string viewName)
         {
             if(viewName == nameof(Edit))
             {
-                var departments = _unitOfWork.Departments.GetAll();
+                var departments = await _unitOfWork.Departments.GetAllAsync();
                 SelectList listItems = new SelectList(departments, "Id", "Name");
                 ViewBag.Departments = listItems;
             }
             if (!id.HasValue) return BadRequest();
-            var employee = _unitOfWork.Employees.Get(id.Value);
+            var employee = await _unitOfWork.Employees.GetAsync(id.Value);
             if (employee is null) return NotFound();
 
             #region Manual Mapping

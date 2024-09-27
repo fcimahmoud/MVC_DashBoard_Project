@@ -1,20 +1,23 @@
 ﻿
+
 namespace DemoPresentationLayer.Controllers
 {
     public class DepartmentsController : Controller
     {
-        //private readonly IGenericRepository<Department> _repo;
-        private IDepartmentRepository _repo;
-        public DepartmentsController(IDepartmentRepository repo)
-        { 
-            _repo = repo;
-        }
+		//private readonly IGenericRepository<Department> _repo;
+		//private IDepartmentRepository _repo;
+		private readonly IUnitOfWork _unitOfWork;
 
-        [HttpGet]
-        public IActionResult Index()
+		public DepartmentsController(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
+
+		[HttpGet]
+        public async Task<IActionResult> Index()
         {
             // Retrieve All Departments
-            var departments = _repo.GetAll();
+            var departments = await _unitOfWork.Departments.GetAllAsync();
             return View(departments);
         }
         
@@ -23,19 +26,19 @@ namespace DemoPresentationLayer.Controllers
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(Department department)
+        public async Task<IActionResult> Create(Department department)
         {
             // Server Side Validation
             if (!ModelState.IsValid) return View();
-            _repo.Create(department);
+			await _unitOfWork.Departments.AddAsync(department);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Details(int? id) 
-            => DepartmentControllerHandler(id, nameof(Details));
+        public async Task<IActionResult> Details(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Details));
 
-        public IActionResult Edit(int? id) 
-            => DepartmentControllerHandler(id, nameof(Edit));
+        public async Task<IActionResult> Edit(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Edit));
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit([FromRoute]int id,Department department)
         {
@@ -45,7 +48,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Update(department);
+					_unitOfWork.Departments.Update(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch(Exception ex)
@@ -57,8 +60,8 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
-        public IActionResult Delete(int? id) 
-            => DepartmentControllerHandler(id, nameof(Delete));
+        public async Task<IActionResult> Delete(int? id) 
+            => await DepartmentControllerHandlerAsync(id, nameof(Delete));
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute] int id, Department department)
         {
@@ -68,7 +71,7 @@ namespace DemoPresentationLayer.Controllers
             {
                 try
                 {
-                    _repo.Delete(department);
+					_unitOfWork.Departments.Delete(department);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -80,10 +83,10 @@ namespace DemoPresentationLayer.Controllers
             return View(department);
         }
 
-        public IActionResult DepartmentControllerHandler(int? id, string viewName)
+        public async Task<IActionResult> DepartmentControllerHandlerAsync(int? id, string viewName)
         {
             if (!id.HasValue) return BadRequest();
-            var department = _repo.Get(id.Value);
+            var department = await _unitOfWork.Departments.GetAsync(id.Value);
             if (department is null) return NotFound();
             return View(viewName, department);
         }

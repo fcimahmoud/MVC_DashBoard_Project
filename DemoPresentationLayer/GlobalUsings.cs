@@ -12,3 +12,4 @@ global using AutoMapper;
 global using DemoPresentationLayer.Utilities;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
+

@@ -28,6 +28,11 @@ namespace DemoPresentationLayer
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+
+            });
+
             ///builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             ///builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             ///builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -47,6 +52,7 @@ namespace DemoPresentationLayer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
