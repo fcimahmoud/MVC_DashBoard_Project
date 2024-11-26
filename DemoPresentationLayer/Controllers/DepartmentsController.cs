@@ -31,6 +31,7 @@ namespace DemoPresentationLayer.Controllers
             // Server Side Validation
             if (!ModelState.IsValid) return View();
 			await _unitOfWork.Departments.AddAsync(department);
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -72,6 +73,7 @@ namespace DemoPresentationLayer.Controllers
                 try
                 {
 					_unitOfWork.Departments.Delete(department);
+                    _unitOfWork.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
