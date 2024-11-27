@@ -31,22 +31,16 @@ The application implements key design patterns like **Generic Repository** and *
 ## Installation and Setup
 1. Clone the repository:
    ```bash
-   bash
-   
    git clone https://github.com/fcimahmoud/MVC_PROJECT.git
    cd MVC_PROJECT
 2. Open the solution in Visual Studio.
 3. Update the database connection string in appsettings.json under the Presentation Layer (PL):
-   ```bash
-   json
-   
+   ```json
     "ConnectionStrings": {
         "SQLConnection": "Your_Connection_String"
     }
 4. Apply the migrations to create the database schema:
     ```bash
-    bash
-   
     dotnet ef database update
 
 5. Run the application:
