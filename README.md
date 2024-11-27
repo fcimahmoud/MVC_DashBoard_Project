@@ -3,14 +3,13 @@
 ## Overview
 This project is a modular **MVC-based application** designed using **Multi-Layer Architecture** (PL, BLL, DAL) to ensure scalability, maintainability, and separation of concerns. It includes a dynamic **Presentation Layer (PL)** with features for CRUD operations and a robust backend to manage business logic and data access efficiently.
 
-The application implements key design patterns like **Generic Repository**, **Unit of Work**, and **Service Manager** to ensure flexibility and reusability. It also integrates **Entity Framework Core** and **SQL Server** for database management and **ASP.NET Identity** for secure user authentication and authorization.
+The application implements key design patterns like **Generic Repository** and **Unit of Work** to ensure flexibility and reusability. It also integrates **Entity Framework Core** and **SQL Server** for database management and **ASP.NET Identity** for secure user authentication and authorization.
 
 ---
 
 ## Features
 - **User Management:** Role-based access control using **ASP.NET Identity**.
 - **CRUD Operations:** Dynamic views for creating, editing, deleting, and viewing records.
-- **Onion Architecture:** Decoupling core application logic from external dependencies.
 - **Responsive UI:** Built with **Bootstrap** for a modern and user-friendly interface.
 - **Validation:** Server-side validation using **Data Annotations** and client-side validation with **jQuery Validation**.
 - **Scalable Design:** Designed with best practices in architecture and patterns for extensibility.
@@ -22,10 +21,10 @@ The application implements key design patterns like **Generic Repository**, **Un
 - **Frontend:** Razor Pages, Bootstrap, jQuery
 - **Backend:** ASP.NET Core, C#, LINQ
 - **Database:** SQL Server, EF Core
-- **Design Patterns:** Repository Pattern, Unit of Work, Service Manager
-- **Architectures:** Multi-Layer Architecture, Onion Architecture
+- **Design Patterns:** Repository Pattern, Unit of Work
+- **Architectures:** Multi-Layer Architecture
 - **Authentication:** ASP.NET Identity
-- **Tools:** Visual Studio, Postman, Git & GitHub
+- **Tools:** Visual Studio, Git & GitHub
 
 ---
 
@@ -82,7 +81,6 @@ This project is licensed under the MIT License.
 
 ## Contact
 For any questions or feedback, feel free to contact:
-- **Name:** Mahmoud
 - **Email:** [ma5740@fayoum.edu.eg]
 - **GitHub:** [github.com/fcimahmoud](https://github.com/fcimahmoud)
 
