@@ -68,11 +68,6 @@ The application implements key design patterns like **Generic Repository** and *
 
 ---
 
-## License
-This project is licensed under the MIT License.
-
----
-
 ## Contact
 For any questions or feedback, feel free to contact:
 - **Email:** [ma5740@fayoum.edu.eg]
